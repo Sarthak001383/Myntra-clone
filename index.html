@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Myntra Clone + Admin Dashboard</title>
+    <style>
+        :root {
+            --pink: #ff3f6c;
+            --dark: #282c3f;
+            --muted: #535766;
+            --bg: #f5f5f6;
+            --border: #eaeaec;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: #fff;
+            color: var(--dark);
+        }
+
+        /* Navbar */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 4%;
+            height: 72px;
+            background: #fff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--pink);
+            letter-spacing: 1px;
+            cursor: pointer;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.4rem;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+        }
+
+        .nav-links span {
+            cursor: pointer;
+            padding: 24px 0;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-links span:hover,
+        .nav-links span.active {
+            border-color: var(--pink);
+            color: var(--pink);
+        }
+
+        .search-box {
+            width: 30%;
+            padding: 0.6rem 1rem;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            border-radius: 4px;
+            outline: none;
+        }
+
+        .actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.55rem 1rem;
+            border: none;
+            border-radius: 4px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .btn-pink {
+            background: var(--pink);
+            color: #fff;
+        }
+
+        .btn-outline {
+            background: #fff;
+            border: 1px solid var(--dark);
+            color: var(--dark);
+        }
+
+        /* Views */
+        .view {
+            display: none;
+            padding: 2rem 4%;
+        }
+
+        .view.active {
+            display: block;
+        }
+
+        /* Banner */
+        .banner {
+            background: linear-gradient(90deg, #ffe5ec, #fff0f3);
+            padding: 2.2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .banner h1 {
+            font-size: 2rem;
+            color: var(--dark);
+        }
+
+        .banner p {
+            color: var(--muted);
+            margin-top: 0.4rem;
+        }
+
+        /* Product Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            overflow: hidden;
+            transition: box-shadow 0.2s;
+            background: #fff;
+        }
+
+        .card:hover {
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+        }
+
+        .card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            background: #f8f8f8;
+        }
+
+        .card-body {
+            padding: 0.9rem;
+        }
+
+        .brand {
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .title {
+            color: var(--muted);
+            font-size: 0.85rem;
+            margin: 0.2rem 0 0.5rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .price-row {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            font-size: 0.9rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .price {
+            font-weight: 700;
+        }
+
+        .mrp {
+            text-decoration: line-through;
+            color: #94969f;
+            font-size: 0.8rem;
+        }
+
+        .disc {
+            color: #ff905a;
+            font-weight: 700;
+            font-size: 0.8rem;
+        }
+
+        /* Dashboard */
+        .kpis {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .kpi-card {
+            background: var(--bg);
+            padding: 1.3rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--pink);
+        }
+
+        .kpi-card h3 {
+            font-size: 0.85rem;
+            color: var(--muted);
+            text-transform: uppercase;
+        }
+
+        .kpi-card p {
+            font-size: 1.7rem;
+            font-weight: 800;
+            margin-top: 0.4rem;
+        }
+
+        .dash-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+        }
+
+        .panel {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.4rem;
+        }
+
+        .panel h2 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 0.8rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.6rem;
+            border: 1px solid #d4d5d9;
+            border-radius: 4px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 0.7rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: var(--bg);
+        }
+
+        /* Bag Modal */
+        .bag-bar {
+            background: var(--bg);
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        @media (max-width: 800px) {
+            .dash-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .search-box {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo" onclick="switchView('store')">MYNTRA</div>
+        <nav class="nav-links">
+            <span class="active" onclick="filterCat('All', this)">All</span>
+            <span onclick="filterCat('Men', this)">Men</span>
+            <span onclick="filterCat('Women', this)">Women</span>
+            <span onclick="filterCat('Kids', this)">Kids</span>
+        </nav>
+        <input type="text" id="searchInput" class="search-box" placeholder="Search for products, brands..."
+            oninput="renderStore()" />
+        <div class="actions">
+            <button class="btn btn-outline" onclick="switchView('store')">Storefront</button>
+            <button class="btn btn-outline" onclick="switchView('dashboard')">Admin Dashboard</button>
+            <button class="btn btn-pink" onclick="checkout()">Bag (<span id="bagCount">0</span>)</button>
+        </div>
+    </header>
+
+    <!-- STOREFRONT VIEW -->
+    <main id="storeView" class="view active">
+        <div class="banner">
+            <div>
+                <h1>END OF REASON SALE</h1>
+                <p>Flat 40% - 70% OFF on Top Fashion Brands. Add items to Bag and click Bag to place an order!</p>
+            </div>
+        </div>
+        <div id="productGrid" class="grid"></div>
+    </main>
+
+    <!-- DASHBOARD VIEW -->
+    <section id="dashboardView" class="view">
+        <div class="kpis">
+            <div class="kpi-card">
+                <h3>Total Revenue</h3>
+                <p id="kpiRevenue">₹0</p>
+            </div>
+            <div class="kpi-card">
+                <h3>Total Orders</h3>
+                <p id="kpiOrders">0</p>
+            </div>
+            <div class="kpi-card">
+                <h3>Active Products</h3>
+                <p id="kpiProducts">0</p>
+            </div>
+        </div>
+
+        <div class="dash-grid">
+            <div class="panel">
+                <h2>Add New Product</h2>
+                <form id="addProductForm">
+                    <div class="form-group"><input type="text" id="pBrand" placeholder="Brand (e.g., Roadster)"
+                            required /></div>
+                    <div class="form-group"><input type="text" id="pTitle"
+                            placeholder="Product Title (e.g., Slim Fit Shirt)" required /></div>
+                    <div class="form-group">
+                        <select id="pCat">
+                            <option value="Men">Men</option>
+                            <option value="Women">Women</option>
+                            <option value="Kids">Kids</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><input type="number" id="pPrice" placeholder="Selling Price (₹)" required />
+                    </div>
+                    <div class="form-group"><input type="number" id="pMrp" placeholder="Original MRP (₹)" required />
+                    </div>
+                    <div class="form-group"><input type="url" id="pImg" placeholder="Image URL (optional)" /></div>
+                    <button type="submit" class="btn btn-pink" style="width:100%;">Publish to Store</button>
+                </form>
+            </div>
+
+            <div class="panel">
+                <h2>Inventory &amp; Recent Orders</h2>
+                <table style="margin-bottom: 1.5rem;">
+                    <thead>
+                        <tr>
+                            <th>Brand &amp; Item</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminProductTable"></tbody>
+                </table>
+                <h2>Customer Orders</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Items</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminOrderTable"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const defaultProducts = [
+            {id: 1, brand: "Roadster", title: "Men Solid Cotton Casual Shirt", cat: "Men", price: 799, mrp: 1599, img: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400"},
+            {id: 2, brand: "Anouk", title: "Women Floral Printed Kurta Set", cat: "Women", price: 1199, mrp: 2499, img: "https://images.unsplash.com/photo-1583391733956-6c78276477e2?w=400"},
+            {id: 3, brand: "HRX", title: "Men Rapid-Dry Running T-Shirt", cat: "Men", price: 549, mrp: 1099, img: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400"},
+            {id: 4, brand: "H&M", title: "Kids Cotton Graphic Hoodie", cat: "Kids", price: 899, mrp: 1499, img: "https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?w=400"}
+        ];
+
+        let products = JSON.parse(localStorage.getItem("myntra_products")) || defaultProducts;
+        let bag = JSON.parse(localStorage.getItem("myntra_bag")) || [];
+        let orders = JSON.parse(localStorage.getItem("myntra_orders")) || [];
+        let currentCat = "All";
+
+        function saveAll() {
+            localStorage.setItem("myntra_products", JSON.stringify(products));
+            localStorage.setItem("myntra_bag", JSON.stringify(bag));
+            localStorage.setItem("myntra_orders", JSON.stringify(orders));
+        }
+
+        function switchView(view) {
+            document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+            document.getElementById(view + "View").classList.add("active");
+            if (view === "dashboard") renderDashboard();
+            else renderStore();
+        }
+
+        function filterCat(cat, el) {
+            currentCat = cat;
+            document.querySelectorAll(".nav-links span").forEach(s => s.classList.remove("active"));
+            el.classList.add("active");
+            switchView("store");
+        }
+
+        function renderStore() {
+            const q = document.getElementById("searchInput").value.toLowerCase();
+            const filtered = products.filter(p =>
+                (currentCat === "All" || p.cat === currentCat) &&
+                (p.brand.toLowerCase().includes(q) || p.title.toLowerCase().includes(q))
+            );
+
+            document.getElementById("productGrid").innerHTML = filtered.map(p => {
+                const disc = Math.round(((p.mrp - p.price) / p.mrp) * 100);
+                return `
+          <div class="card">
+            <img src="${p.img || 'https://via.placeholder.com/300x350?text=Myntra+Fashion'}" alt="${p.title}" />
+            <div class="card-body">
+              <div class="brand">${p.brand}</div>
+              <div class="title">${p.title}</div>
+              <div class="price-row">
+                <span class="price">₹${p.price}</span>
+                <span class="mrp">₹${p.mrp}</span>
+                <span class="disc">(${disc}% OFF)</span>
+              </div>
+              <button class="btn btn-pink" style="width:100%;" onclick="addToBag(${p.id})">ADD TO BAG</button>
+            </div>
+          </div>`;
+            }).join("");
+            document.getElementById("bagCount").textContent = bag.length;
+        }
+
+        function addToBag(id) {
+            const item = products.find(p => p.id === id);
+            if (item) {bag.push(item); saveAll(); renderStore();}
+        }
+
+        function checkout() {
+            if (!bag.length) return alert("Your bag is empty! Add products first.");
+            const total = bag.reduce((sum, i) => sum + Number(i.price), 0);
+            orders.unshift({id: "MYN" + Math.floor(100000 + Math.random() * 900000), count: bag.length, total, status: "Processing"});
+            bag = [];
+            saveAll();
+            renderStore();
+            alert("Order placed! Check the Admin Dashboard to view and update order status.");
+        }
+
+        function renderDashboard() {
+            const revenue = orders.reduce((sum, o) => sum + o.total, 0);
+            document.getElementById("kpiRevenue").textContent = "₹" + revenue.toLocaleString("en-IN");
+            document.getElementById("kpiOrders").textContent = orders.length;
+            document.getElementById("kpiProducts").textContent = products.length;
+
+            document.getElementById("adminProductTable").innerHTML = products.map(p => `
+        <tr>
+          <td><strong>${p.brand}</strong> - ${p.title}</td>
+          <td>${p.cat}</td>
+          <td>₹${p.price}</td>
+          <td><button class="btn btn-outline" onclick="deleteProduct(${p.id})">Delete</button></td>
+        </tr>`).join("");
+
+            document.getElementById("adminOrderTable").innerHTML = orders.length ? orders.map((o, idx) => `
+        <tr>
+          <td>${o.id}</td>
+          <td>${o.count} item(s)</td>
+          <td>₹${o.total}</td>
+          <td>
+            <select onchange="updateOrderStatus(${idx}, this.value)">
+              <option ${o.status === 'Processing' ? 'selected' : ''}>Processing</option>
+              <option ${o.status === 'Shipped' ? 'selected' : ''}>Shipped</option>
+              <option ${o.status === 'Delivered' ? 'selected' : ''}>Delivered</option>
+            </select>
+          </td>
+        </tr>`).join("") : `<tr><td colspan="4">No orders placed yet.</td></tr>`;
+        }
+
+        document.getElementById("addProductForm").addEventListener("submit", e => {
+            e.preventDefault();
+            products.unshift({
+                id: Date.now(),
+                brand: document.getElementById("pBrand").value,
+                title: document.getElementById("pTitle").value,
+                cat: document.getElementById("pCat").value,
+                price: Number(document.getElementById("pPrice").value),
+                mrp: Number(document.getElementById("pMrp").value),
+                img: document.getElementById("pImg").value
+            });
+            saveAll();
+            e.target.reset();
+            renderDashboard();
+        });
+
+        function deleteProduct(id) {
+            products = products.filter(p => p.id !== id);
+            saveAll();
+            renderDashboard();
+        }
+
+        function updateOrderStatus(idx, status) {
+            orders[idx].status = status;
+            saveAll();
+        }
+
+        renderStore();
+    </script>
+</body>
+
+</html>
